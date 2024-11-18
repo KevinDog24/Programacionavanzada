@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Preguntas Recientes</h1>
+    {% for question in questions %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ question.title }}</h5>
+                <p class="card-text">{{ question.content[:200] }}{% if question.content|length > 200 %}...{% endif %}</p>
+                <p class="text-muted">
+                    Por {{ question.author.username }} - {{ question.date_posted.strftime('%Y-%m-%d') }}
+                </p>
+                <a href="{{ url_for('routes.view_question', id=question.id) }}" class="btn btn-primary">Ver más</a>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No hay preguntas aún. ¡Sé el primero en preguntar!
+        </div>
+    {% endfor %}
+    
+    {% if current_user.is_authenticated %}
+        <a href="{{ url_for('routes.create_question') }}" class="btn btn-success mt-3">
+            Crear Nueva Pregunta
+        </a>
+    {% endif %}
+{% endblock %}
